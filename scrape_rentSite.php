@@ -1,4 +1,5 @@
 <?php
+
   // ランキングページの1ページ目のURL(1位~20位)
   //$page_url = "http://suumo.jp/jj/chintai/ichiran/FR301FC001/?ar=030&bs=040&ta=13&sc=13101&sc=13102&sc=13103&sc=13104&sc=13105&sc=13113&sc=13106&sc=13107&sc=13108&sc=13118&sc=13121&sc=13122&sc=13123&sc=13109&sc=13110&sc=13111&sc=13112&sc=13114&sc=13115&sc=13120&sc=13116&sc=13117&sc=13119&cb=0.0&ct=3.0&et=9999999&mb=0&mt=9999999&cn=9999999&shkr1=03&shkr2=03&shkr3=03&shkr4=03&fw2=";
 
@@ -31,18 +32,29 @@
     // name
     echo $house->find('h2.property-header-titlle a.js-cassetLinkHref', 0);
     print "<br />";
-    
+
+    $rentStr = trim($house->find('div.cassette_detail-point', 0)->plaintext);
+  
     // image
-    echo $house->find('div.cassette-body div.cassette_carrousel-thumblist img.js-noContextMenu', 0);
+    echo getCommentBasedOnRent($rentStr) . " " . $house->find('div.cassette-body div.cassette_carrousel-thumblist img.js-noContextMenu', 0);
     print "<br />";
 
     //$houseDetail = $house->find('div.cassette_detail');
-    echo 'Rent fee:' . $house->find('div.cassette_detail-point', 0);
-    echo 'Type:' . $house->find('div.cassette_detail-desc', 0);
-    echo 'Detail:' . $house->find('td.cassette_detail-col2', 0);
+    //$rentStr = trim($house->find('div.cassette_detail-point', 0)->plaintext);
 
-    // rent fee
-    //echo "rent fee:" & $houseDetail->find('div.assette_detail-point', 0);
+
+    echo 'Rent fee:' . $rentStr . "<br />";
+    echo 'Type:' . $house->find('div.cassette_detail-desc', 0)->plaintext . "<br />";
+    echo 'Detail:' . $house->find('td.cassette_detail-col2', 0)->plaintext . "<br />";
+
+    echo 'Access:' . $house->find('div.cassette_note-leftbox', 0)->plaintext . "<br />";
+
+    //echo 'CompanyInformation:' . trim($house->find('div.cassette_note-desc', 0)->plaintext) . "<br />";
+
+    $companyInfoArr = explode(' ', trim($house->find('div.cassette_note-desc', 0)->plaintext));
+
+    echo 'Company:' . $companyInfoArr[0] . "<br />";
+    echo 'PhoneNumber' . $companyInfoArr[2] . "<br />";
 
     echo "----- ----- ----- end";
     print "<br /><br />";
@@ -111,4 +123,33 @@
       //}
       
       //echo $placeName;
+  }
+
+  function getCommentBasedOnRent($targetRentStr){
+    $rentNum = (int)str_replace($targetRentStr, '万円');
+    $returnMessage = '';
+
+    switch (true){
+        case $rentNum < 1:
+          $returnMessage = '近年まれにみる安さ！！';
+          break; 
+
+        case $rentNum < 2:
+          $returnMessage = '爆安！';
+          break;
+
+        case $rentNum < 3:
+          $returnMessage = '手頃な安さ';
+          break; 
+
+        case $rentNum < 4:
+          $returnMessage = 'そこそこの安さ';
+          break; 
+
+        case $rentNum < 5:
+          $returnMessage = '人並みの値段';
+          break; 
+    }
+
+    return $returnMessage;
   }
