@@ -26,38 +26,41 @@
   //using rather jQuery than dom?
   foreach($houses as $house){
 
-    echo "----- ----- ----- start ";
+    //echo "----- ----- ----- start ";
     //echo $house;
 
     // name
-    echo $house->find('h2.property-header-titlle a.js-cassetLinkHref', 0);
-    print "<br />";
+    echo $house->find('h2.property-header-titlle a.js-cassetLinkHref', 0) . '<br />';
+    //print "<br />";
 
     $rentStr = trim($house->find('div.cassette_detail-point', 0)->plaintext);
   
     // image
-    echo getCommentBasedOnRent($rentStr) . " " . $house->find('div.cassette-body div.cassette_carrousel-thumblist img.js-noContextMenu', 0);
+    echo $house->find('div.cassette-body div.cassette_carrousel-thumblist img.js-noContextMenu', 0);
     print "<br />";
 
     //$houseDetail = $house->find('div.cassette_detail');
     //$rentStr = trim($house->find('div.cassette_detail-point', 0)->plaintext);
 
-
+    echo getCommentBasedOnRent($rentStr) . '<br /> '; 
     echo 'Rent fee:' . $rentStr . "<br />";
     echo 'Type:' . $house->find('div.cassette_detail-desc', 0)->plaintext . "<br />";
-    echo 'Detail:' . $house->find('td.cassette_detail-col2', 0)->plaintext . "<br />";
-
-    echo 'Access:' . $house->find('div.cassette_note-leftbox', 0)->plaintext . "<br />";
+    echo 'Detail1:' . $house->find('td.cassette_detail-col2', 0)->plaintext . "<br />";
+    echo 'Detail2:' . $house->find('td.cassette_detail-col3', 0)->plaintext . '<br />';
+    echo 'Detail3:' . $house->find('td.cassette_detail-col3', 0)->plaintext . '<br />';
+    echo 'Access:' . $house->find('div.cassette_note-leftbox', 0)->plaintext . "<br /><br />";
 
     //echo 'CompanyInformation:' . trim($house->find('div.cassette_note-desc', 0)->plaintext) . "<br />";
 
+/*
+    //問題になりそうなのでコメントアウト
     $companyInfoArr = explode(' ', trim($house->find('div.cassette_note-desc', 0)->plaintext));
 
     echo 'Company:' . $companyInfoArr[0] . "<br />";
     echo 'PhoneNumber' . $companyInfoArr[2] . "<br />";
-
-    echo "----- ----- ----- end";
-    print "<br /><br />";
+*/
+    //echo "----- ----- ----- end<br />";
+    //print "<br /><br />";
 /*
     $houses = $item->find('div');
 
@@ -126,29 +129,37 @@
   }
 
   function getCommentBasedOnRent($targetRentStr){
-    $rentNum = (int)str_replace($targetRentStr, '万円');
+    $rentNum = (double)str_replace("万円", "", $targetRentStr);
     $returnMessage = '';
 
+    //echo "test = " . $targetRentStr;
+    //echo "value = " . $rentNum;
+
     switch (true){
-        case $rentNum < 1:
+        case ($rentNum <= 1):
           $returnMessage = '近年まれにみる安さ！！';
           break; 
 
-        case $rentNum < 2:
+        case ($rentNum <= 2):
           $returnMessage = '爆安！';
           break;
 
-        case $rentNum < 3:
+        case ($rentNum <= 3):
           $returnMessage = '手頃な安さ';
           break; 
 
-        case $rentNum < 4:
+        case ($rentNum <= 4):
           $returnMessage = 'そこそこの安さ';
           break; 
 
-        case $rentNum < 5:
+        case ($rentNum <= 5):
           $returnMessage = '人並みの値段';
-          break; 
+          break;
+
+        default:
+          $returnMessage = 'なにこれ？高すぎ';
+          break;
+
     }
 
     return $returnMessage;
