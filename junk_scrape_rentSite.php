@@ -19,28 +19,38 @@
 
   //property-body js-cassetLink
 
-  $html = file_get_html('./Untitled_10.html');
-  //$html = file_get_html('./Untitle.html');
+  //$html = file_get_html('./Untitled2.html');
+  $html = file_get_html('./Untitle.html');
+  //$houses = $html->find('div');
 
-  //$item = $html->find('p', 1);
+  $houses = $html->find('div.property');
+  echo 'test';
 
-  //$houses = $html->find('div[class=property-body js-cassetLink]');
+
+  for($i = 0; $i < 10 ; $i++){
+    echo $i;
+  }
+  //属性による抽出対象の指定
+  //foreach($html->find(‘a[title=top]’) as $element){
+/*
+  foreach($html->find(‘a’) as $element){
+    echo $element->plaintext.’<br>’;
+  }
+*/
 
   //using rather jQuery than dom?
-  // 表示形式が１０、２０、３０件だと上手くいく, ５０件だと失敗、１００件でも失敗
-  foreach($html->find('div[class=property-body js-cassetLink]') as $house){
+  foreach($houses as $house){
 
-    //echo "----- ----- ----- start ";
-    //echo $house;
+    echo "----- ----- ----- start ";
+    echo $house;
 
     // name
-    echo $house->find('h2.property-header-titlle a.js-cassetLinkHref', 0) . '<br />';
-    //print "<br />";
+    //echo $house->find('h2.property-header-titlle a.js-cassetLinkHref', 0) . '<br />';
 
-    $rentStr = trim($house->find('div.cassette_detail-point', 0)->plaintext);
+    //$rentStr = trim($house->find('div.cassette_detail-point', 0)->plaintext);
   
     // image
-    echo $house->find('div.cassette-body div.cassette_carrousel-thumblist img.js-noContextMenu', 0);
+    //echo $house->find('div.cassette-body div.cassette_carrousel-thumblist img.js-noContextMenu', 0);
 /*
     foreach($house->find('div.cassette-body div.cassette_carrousel-thumblist img.js-noContextMenu') as $houseImages){
       echo $houseImages->src. '<br>';
@@ -76,13 +86,13 @@
     //$houseDetail = $house->find('div.cassette_detail');
     //$rentStr = trim($house->find('div.cassette_detail-point', 0)->plaintext);
 
-    echo getCommentBasedOnRent($rentStr) . '<br /> '; 
-    echo 'Rent fee:' . $rentStr . "<br />";
-    echo 'Type:' . $house->find('div.cassette_detail-desc', 0)->plaintext . "<br />";
-    echo 'Detail1:' . $house->find('td.cassette_detail-col2', 0)->plaintext . "<br />";
-    echo 'Detail2:' . $house->find('td.cassette_detail-col3', 0)->plaintext . '<br />';
-    echo 'Detail3:' . $house->find('td.cassette_detail-col4', 0)->plaintext . '<br />';
-    echo 'Access:' . $house->find('div.cassette_note-leftbox', 0)->plaintext . "<br /><br />";
+//    echo getCommentBasedOnRent($rentStr) . '<br /> '; 
+//    echo 'Rent fee:' . $rentStr . "<br />";
+//    echo 'Type:' . $house->find('div.cassette_detail-desc', 0)->plaintext . "<br />";
+//    echo 'Detail1:' . $house->find('td.cassette_detail-col2', 0)->plaintext . "<br />";
+//    echo 'Detail2:' . $house->find('td.cassette_detail-col3', 0)->plaintext . '<br />';
+//    echo 'Detail3:' . $house->find('td.cassette_detail-col4', 0)->plaintext . '<br />';
+//    echo 'Access:' . $house->find('div.cassette_note-leftbox', 0)->plaintext . "<br /><br />";
 
     //echo 'CompanyInformation:' . trim($house->find('div.cassette_note-desc', 0)->plaintext) . "<br />";
 
@@ -95,98 +105,31 @@
 */
     //echo "----- ----- ----- end<br />";
     //print "<br /><br />";
-/*
-    $houses = $item->find('div');
 
-    $iCheck = $iCheck + 1;
-
-    $jCheck = 0;
-
-    foreach($houses as $house){
-
-      $jCheck = $jCheck + 1;
-      echo '-----------------';
-      
-      $placeNameArr = $house->find('h2.property-header-titlle');
-      //$thumbNailArr - $house->find('div.cassette_carrousel-thumblist');
-
-      if(count($placeNameArr) > 0){
-        echo $placeNameArr[0];
-      }
-
-      //if(count($thumbNailArr) > 0){
-      //  echo $thumbNailArr[0];
-      //}
-    }
-
-    echo "iCheck = " & $iCheck & ":JCheck = " & $jCheck;
-*/  
-
-    //echo '<p>' + count($houses) + '</p><br>';
-/*
-      foreach($houses as $house){
-        $placeName = $house->find('h2.property-header-titlle a')
-
-        echo $placeName;
-      }
-      */
-      //echo $item->innertext."<br />";
-/*
-      echo '敷金'
-      echo '礼金'
-      echo '保証金'
-      echo '敷引・償却'
-      echo '間取りの種類'
-      echo '面積'
-      echo '向き'
-      echo '建物の種類'
-      echo '築年数'
-      echo '住所'
-      echo '電車'
-*/
-
-/*
-      タイトル　<h2 class="property-header-titlle">
-
-*/
-
-      //echo '------------------------------------';
-      //echo $item;
-
-      //$placeNames = $item->find('h2.property-header-titlle a');
-
-      //foreach($placeNames as $placeName){
-      //  echo $placeName;
-      //}
-      
-      //echo $placeName;
-  }
+//  }
 
   function getCommentBasedOnRent($targetRentStr){
     $rentNum = (double)str_replace("万円", "", $targetRentStr);
     $returnMessage = '';
-
-    //echo "test = " . $targetRentStr;
-    //echo "value = " . $rentNum;
 
     switch (true){
         case ($rentNum <= 1):
           $returnMessage = '近年まれにみる安さ！！';
           break; 
 
-        case ($rentNum <= 2):
+        case ($rentNum <= 1.5):
           $returnMessage = '爆安！';
           break;
 
-        case ($rentNum <= 3):
+        case ($rentNum <= 2):
           $returnMessage = '手頃な安さ';
           break; 
 
-        case ($rentNum <= 4):
+        case ($rentNum <= 2.5):
           $returnMessage = 'そこそこの安さ';
           break; 
 
-        case ($rentNum <= 5):
+        case ($rentNum <= 3):
           $returnMessage = '人並みの値段';
           break;
 

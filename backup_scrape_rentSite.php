@@ -19,16 +19,14 @@
 
   //property-body js-cassetLink
 
-  $html = file_get_html('./Untitled_10.html');
-  //$html = file_get_html('./Untitle.html');
-
+  $html = file_get_html('./Untitled2.html');
   //$item = $html->find('p', 1);
 
-  //$houses = $html->find('div[class=property-body js-cassetLink]');
+  $houses = $html->find('div[class=property-body js-cassetLink]');
+
 
   //using rather jQuery than dom?
-  // 表示形式が１０、２０、３０件だと上手くいく, ５０件だと失敗、１００件でも失敗
-  foreach($html->find('div[class=property-body js-cassetLink]') as $house){
+  foreach($houses as $house){
 
     //echo "----- ----- ----- start ";
     //echo $house;
@@ -40,7 +38,7 @@
     $rentStr = trim($house->find('div.cassette_detail-point', 0)->plaintext);
   
     // image
-    echo $house->find('div.cassette-body div.cassette_carrousel-thumblist img.js-noContextMenu', 0);
+    //echo $house->find('div.cassette-body div.cassette_carrousel-thumblist img.js-noContextMenu', 0);
 /*
     foreach($house->find('div.cassette-body div.cassette_carrousel-thumblist img.js-noContextMenu') as $houseImages){
       echo $houseImages->src. '<br>';

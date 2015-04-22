@@ -1,0 +1,14 @@
+(function () {
+	var url = encodeURIComponent((window.top==window.self) ? document.URL : document.referrer);
+	var src = "http://dex.advg.jp/dx/p/us" + "?_aid=2342";
+	src += "&_url=" + url;
+	src += "&_nocache=" + (new Date).getTime() + Math.floor(Math.random() * 100000000);
+
+	var us = document.createElement('script');
+	us.type= 'text/javascript';
+	us.src = src;
+	us.async = true;
+	us.defer = true;
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(us, s);
+})();
