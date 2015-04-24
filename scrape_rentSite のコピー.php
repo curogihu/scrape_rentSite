@@ -2,12 +2,6 @@
 
   define("LIMIT_HOUSE_IMAGE_NUM", 3);
 
-  //inctioのライブラリ呼び出し
-  include_once('IXR_Library.php');
-
-  //example.comは投稿先アドレスに変える
-  $client = new IXR_Client("http://city-cheap-rent.xyz/xmlrpc.php");
-
   // ランキングページの1ページ目のURL(1位~20位)
   //$page_url = "http://suumo.jp/jj/chintai/ichiran/FR301FC001/?ar=030&bs=040&ta=13&sc=13101&sc=13102&sc=13103&sc=13104&sc=13105&sc=13113&sc=13106&sc=13107&sc=13108&sc=13118&sc=13121&sc=13122&sc=13123&sc=13109&sc=13110&sc=13111&sc=13112&sc=13114&sc=13115&sc=13120&sc=13116&sc=13117&sc=13119&cb=0.0&ct=3.0&et=9999999&mb=0&mt=9999999&cn=9999999&shkr1=03&shkr2=03&shkr3=03&shkr4=03&fw2=";
 
@@ -25,7 +19,7 @@
 
   //property-body js-cassetLink
 
-  $html = file_get_html('./Untitled_30.html');
+  $html = file_get_html('./Untitled_100.html');
   //$html = file_get_html('./Untitle.html');
 
   //$item = $html->find('p', 1);
@@ -89,29 +83,6 @@
     echo 'Detail2:' . $house->find('td.cassette_detail-col3', 0)->plaintext . '<br />';
     echo 'Detail3:' . $house->find('td.cassette_detail-col4', 0)->plaintext . '<br />';
     echo 'Access:' . $house->find('div.cassette_note-leftbox', 0)->plaintext . "<br /><br />";
-
-    //$status はエラー処理に使う
-    $status = $client->query(
-      "wp.newPost", //使うAPIを指定（wp.newPostは、新規投稿）
-        1, // blog ID: 通常は１、マルチサイト時変更
-        $wp_username, // ユーザー名
-        $wp_password, // パスワード
-        array(
-          'post_author' => 2, // 投稿者ID 未設定の場合投稿者名なしになる。
-          'post_status' => 'publish', // 投稿状態
-          'post_title' => 'テスト投稿です。', // タイトル
-          'post_content' => 'テスト投稿本文です。', //　本文
-          'terms' => array('category' => array(1))　// カテゴリ追加
-        )
-    );
-
-    if(!$status){
-      die('Something went wrong - '.$client->getErrorCode().' : '.$client->getErrorMessage());
-
-    }else{
-        $post_id = $client->getResponse(); //返り値は投稿ID
-    
-    }
 
     //echo 'CompanyInformation:' . trim($house->find('div.cassette_note-desc', 0)->plaintext) . "<br />";
 
