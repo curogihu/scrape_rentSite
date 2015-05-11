@@ -15,12 +15,23 @@
   // 取得したhtmlのsimple_html_domオブジェクトを作成
   //$shd_obj = str_get_html($page_data);
 
+  //var_dump($shd_obj);
+
+  //property-body js-cassetLink
+
   $html = file_get_html('./Untitled_100.html');
   //$html = file_get_html('./Untitle.html');
+
+  //$item = $html->find('p', 1);
+
+  //$houses = $html->find('div[class=property-body js-cassetLink]');
 
   //using rather jQuery than dom?
   // 表示形式が１０、２０、３０件だと上手くいく, ５０件だと失敗、１００件でも失敗
   foreach($html->find('div[class=property-body js-cassetLink]') as $house){
+
+    //echo "----- ----- ----- start ";
+    //echo $house;
 
     // name
     echo $house->find('h2.property-header-titlle a.js-cassetLinkHref', 0) . '<br />';
@@ -74,11 +85,89 @@
     echo 'Access:' . $house->find('div.cassette_note-leftbox', 0)->plaintext . "<br /><br />";
 
     //echo 'CompanyInformation:' . trim($house->find('div.cassette_note-desc', 0)->plaintext) . "<br />";
+
+/*
+    //問題になりそうなのでコメントアウト
+    $companyInfoArr = explode(' ', trim($house->find('div.cassette_note-desc', 0)->plaintext));
+
+    echo 'Company:' . $companyInfoArr[0] . "<br />";
+    echo 'PhoneNumber' . $companyInfoArr[2] . "<br />";
+*/
+    //echo "----- ----- ----- end<br />";
+    //print "<br /><br />";
+/*
+    $houses = $item->find('div');
+
+    $iCheck = $iCheck + 1;
+
+    $jCheck = 0;
+
+    foreach($houses as $house){
+
+      $jCheck = $jCheck + 1;
+      echo '-----------------';
+      
+      $placeNameArr = $house->find('h2.property-header-titlle');
+      //$thumbNailArr - $house->find('div.cassette_carrousel-thumblist');
+
+      if(count($placeNameArr) > 0){
+        echo $placeNameArr[0];
+      }
+
+      //if(count($thumbNailArr) > 0){
+      //  echo $thumbNailArr[0];
+      //}
+    }
+
+    echo "iCheck = " & $iCheck & ":JCheck = " & $jCheck;
+*/  
+
+    //echo '<p>' + count($houses) + '</p><br>';
+/*
+      foreach($houses as $house){
+        $placeName = $house->find('h2.property-header-titlle a')
+
+        echo $placeName;
+      }
+      */
+      //echo $item->innertext."<br />";
+/*
+      echo '敷金'
+      echo '礼金'
+      echo '保証金'
+      echo '敷引・償却'
+      echo '間取りの種類'
+      echo '面積'
+      echo '向き'
+      echo '建物の種類'
+      echo '築年数'
+      echo '住所'
+      echo '電車'
+*/
+
+/*
+      タイトル　<h2 class="property-header-titlle">
+
+*/
+
+      //echo '------------------------------------';
+      //echo $item;
+
+      //$placeNames = $item->find('h2.property-header-titlle a');
+
+      //foreach($placeNames as $placeName){
+      //  echo $placeName;
+      //}
+      
+      //echo $placeName;
   }
 
   function getCommentBasedOnRent($targetRentStr){
     $rentNum = (double)str_replace("万円", "", $targetRentStr);
     $returnMessage = '';
+
+    //echo "test = " . $targetRentStr;
+    //echo "value = " . $rentNum;
 
     switch (true){
         case ($rentNum <= 1):
