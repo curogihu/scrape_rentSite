@@ -2,12 +2,6 @@
 
   define("LIMIT_HOUSE_IMAGE_NUM", 3);
 
-  //inctioのライブラリ呼び出し
-  include_once('IXR_Library.php');
-
-  //example.comは投稿先アドレスに変える
-  $client = new IXR_Client("http://city-cheap-rent.xyz/xmlrpc.php");
-
   // ランキングページの1ページ目のURL(1位~20位)
   //$page_url = "http://suumo.jp/jj/chintai/ichiran/FR301FC001/?ar=030&bs=040&ta=13&sc=13101&sc=13102&sc=13103&sc=13104&sc=13105&sc=13113&sc=13106&sc=13107&sc=13108&sc=13118&sc=13121&sc=13122&sc=13123&sc=13109&sc=13110&sc=13111&sc=13112&sc=13114&sc=13115&sc=13120&sc=13116&sc=13117&sc=13119&cb=0.0&ct=3.0&et=9999999&mb=0&mt=9999999&cn=9999999&shkr1=03&shkr2=03&shkr3=03&shkr4=03&fw2=";
 
@@ -21,23 +15,12 @@
   // 取得したhtmlのsimple_html_domオブジェクトを作成
   //$shd_obj = str_get_html($page_data);
 
-  //var_dump($shd_obj);
-
-  //property-body js-cassetLink
-
-  $html = file_get_html('./Untitled_30.html');
+  $html = file_get_html('./Untitled_100.html');
   //$html = file_get_html('./Untitle.html');
-
-  //$item = $html->find('p', 1);
-
-  //$houses = $html->find('div[class=property-body js-cassetLink]');
 
   //using rather jQuery than dom?
   // 表示形式が１０、２０、３０件だと上手くいく, ５０件だと失敗、１００件でも失敗
   foreach($html->find('div[class=property-body js-cassetLink]') as $house){
-
-    //echo "----- ----- ----- start ";
-    //echo $house;
 
     // name
     echo $house->find('h2.property-header-titlle a.js-cassetLinkHref', 0) . '<br />';
@@ -90,113 +73,12 @@
     echo 'Detail3:' . $house->find('td.cassette_detail-col4', 0)->plaintext . '<br />';
     echo 'Access:' . $house->find('div.cassette_note-leftbox', 0)->plaintext . "<br /><br />";
 
-    //$status はエラー処理に使う
-    $status = $client->query(
-      "wp.newPost", //使うAPIを指定（wp.newPostは、新規投稿）
-        1, // blog ID: 通常は１、マルチサイト時変更
-        $wp_username, // ユーザー名
-        $wp_password, // パスワード
-        array(
-          'post_author' => 2, // 投稿者ID 未設定の場合投稿者名なしになる。
-          'post_status' => 'publish', // 投稿状態
-          'post_title' => 'テスト投稿です。', // タイトル
-          'post_content' => 'テスト投稿本文です。', //　本文
-          'terms' => array('category' => array(1))　// カテゴリ追加
-        )
-    );
-
-    if(!$status){
-      die('Something went wrong - '.$client->getErrorCode().' : '.$client->getErrorMessage());
-
-    }else{
-        $post_id = $client->getResponse(); //返り値は投稿ID
-    
-    }
-
     //echo 'CompanyInformation:' . trim($house->find('div.cassette_note-desc', 0)->plaintext) . "<br />";
-
-/*
-    //問題になりそうなのでコメントアウト
-    $companyInfoArr = explode(' ', trim($house->find('div.cassette_note-desc', 0)->plaintext));
-
-    echo 'Company:' . $companyInfoArr[0] . "<br />";
-    echo 'PhoneNumber' . $companyInfoArr[2] . "<br />";
-*/
-    //echo "----- ----- ----- end<br />";
-    //print "<br /><br />";
-/*
-    $houses = $item->find('div');
-
-    $iCheck = $iCheck + 1;
-
-    $jCheck = 0;
-
-    foreach($houses as $house){
-
-      $jCheck = $jCheck + 1;
-      echo '-----------------';
-      
-      $placeNameArr = $house->find('h2.property-header-titlle');
-      //$thumbNailArr - $house->find('div.cassette_carrousel-thumblist');
-
-      if(count($placeNameArr) > 0){
-        echo $placeNameArr[0];
-      }
-
-      //if(count($thumbNailArr) > 0){
-      //  echo $thumbNailArr[0];
-      //}
-    }
-
-    echo "iCheck = " & $iCheck & ":JCheck = " & $jCheck;
-*/  
-
-    //echo '<p>' + count($houses) + '</p><br>';
-/*
-      foreach($houses as $house){
-        $placeName = $house->find('h2.property-header-titlle a')
-
-        echo $placeName;
-      }
-      */
-      //echo $item->innertext."<br />";
-/*
-      echo '敷金'
-      echo '礼金'
-      echo '保証金'
-      echo '敷引・償却'
-      echo '間取りの種類'
-      echo '面積'
-      echo '向き'
-      echo '建物の種類'
-      echo '築年数'
-      echo '住所'
-      echo '電車'
-*/
-
-/*
-      タイトル　<h2 class="property-header-titlle">
-
-*/
-
-      //echo '------------------------------------';
-      //echo $item;
-
-      //$placeNames = $item->find('h2.property-header-titlle a');
-
-      //foreach($placeNames as $placeName){
-      //  echo $placeName;
-      //}
-      
-      //echo $placeName;
   }
 
   function getCommentBasedOnRent($targetRentStr){
     $rentNum = (double)str_replace("万円", "", $targetRentStr);
     $returnMessage = '';
-
-    //echo "test = " . $targetRentStr;
-    //echo "value = " . $rentNum;
 
     switch (true){
         case ($rentNum <= 1):
