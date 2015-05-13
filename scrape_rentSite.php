@@ -13,7 +13,7 @@
   $wp_password = "??????????";
   $returnValue = -1;
 
-// 
+  // 
   require_once 'simplehtmldom/simple_html_dom.php';
 
   // ランキングページの1ページ目のURL(1位~20位)
@@ -30,6 +30,39 @@
 
   // 表示形式が１０、２０、３０件だと上手くいく, ５０件だと失敗、１００件でも失敗
   foreach($shd_obj->find('div[class=property-body js-cassetLink]') as $house){
+
+//
+    //明日、以下の文をループするように編集する
+    $status = $client->query(
+    "wp.newPost", //使うAPIを指定（wp.newPostは、新規投稿）
+    1, // blog ID: 通常は１、マルチサイト時変更
+    $wp_username, // ユーザー名
+    $wp_password, // パスワード
+    array(
+      'post_author' => 1, // 投稿者ID 未設定の場合投稿者名なしになる。
+      'post_status' => 'publish', // 投稿状態
+      'post_title' => 'テスト投稿です。', // タイトル
+      'post_content' => 'テスト投稿本文です。', //　本文
+      //'terms' => array('category' => array(1))　// カテゴリ追加
+      //'terms' => array('category' => '東京23区')　// カテゴリ追加
+    
+      //最初は１からスタート。 未分類 = 1, 東京23区 = 2...
+      'terms' => array('category' => array(2)), // カテゴリ追加
+
+      //タグは事前登録不要
+      'terms_names' => array('post_tag' => array('タグ１','タグ２'))
+    )
+  );
+
+  if(!$status){
+    die('Something went wrong - '.$client->getErrorCode().' : '.$client->getErrorMessage());
+
+  } else {
+    $post_id = $client->getResponse(); //返り値は投稿ID
+    $returnValue = $post_id; 
+  }
+
+//    
 
     // name
     echo $house->find('h2.property-header-titlle a.js-cassetLinkHref', 0) . '<br />';
