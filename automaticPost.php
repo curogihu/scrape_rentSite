@@ -1,10 +1,13 @@
 <?php
   
+  define("LIMIT_HOUSE_IMAGE_NUM", 3);
 
   //inctioのライブラリ呼び出し
   include_once('IXR_Library.php');
 
   require_once 'simplehtmldom/simple_html_dom.php';
+
+  date_default_timezone_set("JST");
 
   //インターネットから取り込み
   //$page_url = "http://suumo.jp/jj/chintai/ichiran/FR301FC001/?ar=030&bs=040&ta=13&sc=13101&sc=13102&sc=13103&sc=13104&sc=13105&sc=13113&sc=13106&sc=13107&sc=13108&sc=13118&sc=13121&sc=13122&sc=13123&sc=13109&sc=13110&sc=13111&sc=13112&sc=13114&sc=13115&sc=13120&sc=13116&sc=13117&sc=13119&cb=0.0&ct=3.0&mb=0&mt=9999999&et=9999999&cn=9999999&shkr1=03&shkr2=03&shkr3=03&shkr4=03&sngz=&po1=09&";
@@ -19,12 +22,12 @@
 */
 
   //ローカルから取り込み
-  //$html = file_get_html('./Untitled_100.html');
+  $html = file_get_html('./Untitled_100.html');
 
   //example.comは投稿先アドレスに変える
-  $client = new IXR_Client("http://xxxxxxxxxxx/xmlrpc.php");
-  $wp_username = "yyyyyyyyyyy";
-  $wp_password = "zzzzzzzzzzz";
+  $client = new IXR_Client("http://xxxx/xmlrpc.php");
+  $wp_username = "yyyy";
+  $wp_password = "zzzz";
   //$cnt = 0;
 
   $returnValue = -1;
@@ -58,10 +61,41 @@
                     '築年数: ' . $homeCreatedYear . '<br>' .
                     'アクセス: ' . $homeAccess . '<br>' . 
                     '住所: ' . $homeAddress . '<br>';
+    echo date("H:i:s");
+    echo "<br><br>";
     echo $homeContents;
 
-    //$homeImages$ = $house->find('div.cassette-body div.cassette_carrousel-thumblist img.js-noContextMenu');
+    $houseImageCnt = count($house->find('div.cassette-body div.cassette_carrousel-thumblist img.js-noContextMenu'));
 
+    echo $houseImageCnt . "<br>";
+
+    if(LIMIT_HOUSE_IMAGE_NUM > $houseImageNum){
+      $limitHouseImageNum = $houseImageNum;
+
+    }else{
+      $limitHouseImageNum = LIMIT_HOUSE_IMAGE_NUM;
+    }
+
+    $houseI = $house->find('div.cassette-body div.cassette_carrousel-thumblist img.js-noContextMenu');
+
+    //rel取得ok
+    foreach($houseI as $tst){
+      echo $tst->rel . "<br>";
+    }
+
+  //  for($i = 0; $i < $limitHouseImageNum; $i++){
+      //echo $house->find('div.cassette-body div.cassette_carrousel-thumblist img.js-noContextMenu', 0);
+ //   }
+/*
+    $homeImages = $house->find('div.cassette-body div.cassette_carrousel-thumblist img.js-noContextMenu');
+
+    $cnt = 0;
+    foreach($homeImages as $homeImage){
+      echo ($cnt + 1) . " " . $homeImage . "<br>";
+      //echo $cnt;
+      $cnt++;
+    }
+*/
 
 /*
     $status = $client->query(
@@ -71,7 +105,7 @@
       $wp_password, // パスワード
       array(
         'post_author' => 1, // 投稿者ID 未設定の場合投稿者名なしになる。
-        'post_status' => 'publish', // 投稿状態
+        'post_status' => 'draft', // 投稿状態, draft, private, publish, pendingの４つ
         'post_title' => $homeName, // タイトル
         'post_content' => $homeContents, //　本文
         //'terms' => array('category' => array(1))　// カテゴリ追加
@@ -92,8 +126,9 @@
       $post_id = $client->getResponse(); //返り値は投稿ID
       $returnValue = $post_id; 
     }
-  }
 */
+  }
+
   echo "finished";
 
   function getHouseName($targetHouse){
