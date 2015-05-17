@@ -6,22 +6,26 @@
 
   require_once 'simplehtmldom/simple_html_dom.php';
 
-  $page_url = "http://suumo.jp/jj/chintai/ichiran/FR301FC001/?ar=030&bs=040&ta=13&sc=13101&sc=13102&sc=13103&sc=13104&sc=13105&sc=13113&sc=13106&sc=13107&sc=13108&sc=13118&sc=13121&sc=13122&sc=13123&sc=13109&sc=13110&sc=13111&sc=13112&sc=13114&sc=13115&sc=13120&sc=13116&sc=13117&sc=13119&cb=0.0&ct=3.0&mb=0&mt=9999999&et=9999999&cn=9999999&shkr1=03&shkr2=03&shkr3=03&shkr4=03&sngz=&po1=09&";
-  $page_data = mb_convert_encoding(file_get_contents($page_url),'UTF-8','auto');
-  $html = str_get_html($page_data);
+  //インターネットから取り込み
+  //$page_url = "http://suumo.jp/jj/chintai/ichiran/FR301FC001/?ar=030&bs=040&ta=13&sc=13101&sc=13102&sc=13103&sc=13104&sc=13105&sc=13113&sc=13106&sc=13107&sc=13108&sc=13118&sc=13121&sc=13122&sc=13123&sc=13109&sc=13110&sc=13111&sc=13112&sc=13114&sc=13115&sc=13120&sc=13116&sc=13117&sc=13119&cb=0.0&ct=3.0&mb=0&mt=9999999&et=9999999&cn=9999999&shkr1=03&shkr2=03&shkr3=03&shkr4=03&sngz=&po1=09&";
+  //$page_data = mb_convert_encoding(file_get_contents($page_url),'UTF-8','auto');
+  //$html = str_get_html($page_data);
+
+  
 /*
   $imgInfo = getimagesize('tmp.jpg');
   $type = $imgInfo['mime'];
   $bits = new IXR_Base64(file_get_contents('tmp.jpg'));
 */
 
+  //ローカルから取り込み
   //$html = file_get_html('./Untitled_100.html');
 
   //example.comは投稿先アドレスに変える
-  $client = new IXR_Client("http://xxxxxxxxxxxx/xmlrpc.php");
-  $wp_username = "yyyyyyyyyyyyyyy";
-  $wp_password = "zzzzzzzzzzzzzzz";
-  $cnt = 0;
+  $client = new IXR_Client("http://xxxxxxxxxxx/xmlrpc.php");
+  $wp_username = "yyyyyyyyyyy";
+  $wp_password = "zzzzzzzzzzz";
+  //$cnt = 0;
 
   $returnValue = -1;
 
@@ -46,7 +50,7 @@
 
 //      echo '名称: ' . $homeNameAnchor . '\n' . 'test';
 
-    $homeContents = '名称: ' . $homeNameAnchor . '<br>' . 
+    $homeContents = '詳細のリンク: ' . $homeNameAnchor . '<br>' . 
                     '家賃: ' . $rentStr . '   ' . $comment . '<br>' .
                     'タイプ: ' . $homeType . '<br>' .
                     'その他費用: ' . $homeOtherFee . '<br>' .
@@ -54,7 +58,12 @@
                     '築年数: ' . $homeCreatedYear . '<br>' .
                     'アクセス: ' . $homeAccess . '<br>' . 
                     '住所: ' . $homeAddress . '<br>';
+    echo $homeContents;
 
+    //$homeImages$ = $house->find('div.cassette-body div.cassette_carrousel-thumblist img.js-noContextMenu');
+
+
+/*
     $status = $client->query(
       "wp.newPost", //使うAPIを指定（wp.newPostは、新規投稿）
       1, // blog ID: 通常は１、マルチサイト時変更
@@ -84,7 +93,7 @@
       $returnValue = $post_id; 
     }
   }
-
+*/
   echo "finished";
 
   function getHouseName($targetHouse){
